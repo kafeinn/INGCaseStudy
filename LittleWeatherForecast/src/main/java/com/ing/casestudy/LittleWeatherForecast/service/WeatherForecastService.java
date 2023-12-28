@@ -4,8 +4,12 @@ package com.ing.casestudy.LittleWeatherForecast.service;
 import com.ing.casestudy.LittleWeatherForecast.model.IForecastData;
 import com.ing.casestudy.LittleWeatherForecast.model.LittleForecastData;
 import com.ing.casestudy.LittleWeatherForecast.model.MainWeatherData;
+import com.ing.casestudy.LittleWeatherForecast.properties.LittleWeatherAppConfig;
+import com.ing.casestudy.LittleWeatherForecast.properties.SpringConfiguration;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,7 +25,6 @@ import java.util.List;
 @Service
 public class WeatherForecastService extends MappingJackson2HttpMessageConverter {
 
-    private static final String API_KEY = "2b1c98724cec7878fd4301ccebe503d5";
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     private static WeatherForecastService weatherForecastServiceInstance = new WeatherForecastService();
@@ -35,7 +38,11 @@ public class WeatherForecastService extends MappingJackson2HttpMessageConverter 
     }
 
     public List<IForecastData> getForecastDataFromService(String city) throws ParseException {
-        String endpoint = BASE_URL + "forecast?q=" + city + "&mode=json&appid=" + API_KEY + "&units=metric";
+
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+        LittleWeatherAppConfig appConfig = applicationContext.getBean(LittleWeatherAppConfig.class);
+
+        String endpoint = BASE_URL + "forecast?q=" + city + "&mode=json&appid=" + appConfig.getOpenWeatherApiKey() + "&units=metric";
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(endpoint, String.class);
 
