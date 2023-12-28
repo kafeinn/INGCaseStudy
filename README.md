@@ -22,6 +22,7 @@ Little Weather Forecast API uses 5 day weather forecast data service which gathe
 
 After Little Weather Forecast API service is started, you can call it on your browser using rest api calls easily as in the examples seen below.
 To call the API, the city name must be passed as an arguement as in the format below. 
+
 http://localhost:8080/forecast/{cityname}
 
 Some sample calls are given for you as:
